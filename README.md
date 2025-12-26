@@ -56,3 +56,75 @@ The project prioritizes **graph-based analytics instead of raw tables**:
 
 ## 🗂 Project Structure
 
+teduWallet/
+│
+├── Controllers/
+├── Models/
+├── Services/
+├── Views/
+├── wwwroot/
+│ ├── css/
+│ ├── js/
+│
+├── App_Data/
+├── schema.sql
+├── appsettings.json
+├── Program.cs
+└── teduWallet.csproj
+
+---
+
+## 🧑‍💻 User Roles
+
+### Student
+- View available tasks
+- Apply for tasks
+- Earn and spend TDC
+- View wallet balance and transaction history
+- Compete on the leaderboard
+
+### Admin
+- Manage users
+- Create and edit tasks
+- Create and manage rewards
+- Approve or reject task submissions
+- Monitor system activity
+
+---
+
+## ⚙️ Setup Instructions
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/your-username/teduWallet.git
+Configure the database connection in appsettings.json
+Apply the database schema
+schema.sql
+Run the project
+dotnet run
+Open in browser:
+https://localhost:xxxx
+🎯 Purpose
+TEDU Wallet was developed as an academic project to demonstrate:
+Role-based system design
+Transaction-based wallet logic
+Data visualization with charts
+Clean dashboard UI/UX principles
+Real-world campus reward scenarios
+👥 Contributors
+Mehmet Karayel
+Elif Seden Yurtseven
+Berre Yazgı
+Namık Batın Gambaz
+📄 License
+This project is intended for educational purposes.
+
+---
+
+If you want, I can next:
+- Add **screenshots section**
+- Optimize README for **grading rubric**
+- Create a **short demo description**
+- Write a **GitHub project description (About section)**
+
+Just tell me 👍
