@@ -139,32 +139,39 @@ namespace teduWallet.Controllers
                 return RedirectToAction("Users");
             }
 
-            // 1. Remove related WalletSpendsReward records
-            var walletSpends = _context.WalletSpendsRewards.Where(w => w.StudentId == userId);
-            _context.WalletSpendsRewards.RemoveRange(walletSpends);
+            // 1. Remove related WalletSpendsReward records (by StudentId)
+            // Use ExecuteDeleteAsync to avoid fetching entities that might cause 'Data is Null' errors
+            await _context.WalletSpendsRewards
+                .Where(w => w.StudentId == userId)
+                .ExecuteDeleteAsync();
 
-            // 2. Remove Wallet
+            // 2. Remove Wallet and its related records
             var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.StudentId == userId);
             if (wallet != null)
             {
-                // Also double check for any spending records linked by WalletId if not covered by StudentId
-                var walletSpendsByWallet = _context.WalletSpendsRewards.Where(w => w.WalletId == wallet.WalletId);
-                _context.WalletSpendsRewards.RemoveRange(walletSpendsByWallet);
+                // Remove spending records linked by WalletId
+                await _context.WalletSpendsRewards
+                    .Where(w => w.WalletId == wallet.WalletId)
+                    .ExecuteDeleteAsync();
                 
+                // Remove the Wallet itself
                 _context.Wallets.Remove(wallet);
             }
 
             // 3. Remove Logs
-            var logs = _context.Logs.Where(l => l.StudentId == userId);
-            _context.Logs.RemoveRange(logs);
+            await _context.Logs
+                .Where(l => l.StudentId == userId)
+                .ExecuteDeleteAsync();
 
             // 4. Remove Applies
-            var applies = _context.Applies.Where(a => a.StudentId == userId);
-            _context.Applies.RemoveRange(applies);
+            await _context.Applies
+                .Where(a => a.StudentId == userId)
+                .ExecuteDeleteAsync();
 
             // 5. Remove Completes
-            var completes = _context.Completes.Where(c => c.StudentId == userId);
-            _context.Completes.RemoveRange(completes);
+            await _context.Completes
+                .Where(c => c.StudentId == userId)
+                .ExecuteDeleteAsync();
 
             // 6. Finally remove Student
             _context.Students.Remove(student);
