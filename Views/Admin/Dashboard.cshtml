@@ -1,175 +1,249 @@
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "System Overview";
     Layout = "_AdminLayout";
 }
 
-<div class="container-fluid py-4">
-    <!-- Welcome Header -->
-    <div class="row mb-5">
-        <div class="col-md-8">
-            <h1 class="fw-bold display-5 mb-2">Admin Dashboard 🛡️</h1>
-            <p class="text-muted fs-5">Welcome back, @(User.Identity?.Name ?? "Admin"). Here's a quick overview of the
-                system.</p>
-        </div>
+<style>
+    /* STRICT GLOBAL SCROLL LOCK */
+    html, body {
+        overflow: hidden !important;
+        height: 100vh !important;
+        margin: 0 !important;
+    }
+
+    /* Layout Adjustments */
+    :root {
+        --gap-size: 0.75rem;
+    }
+
+    /* Target the parent container from _AdminLayout context */
+    .container-fluid {
+        padding-bottom: 0 !important; /* Remove bottom padding validity */
+        height: calc(100vh - 75px); /* Fit within viewport minus navbar */
+        overflow: hidden !important;
+    }
+
+    /* Main Dashboard Wrapper */
+    .viewport-fit-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-size);
+        overflow: hidden;
+    }
+
+    /* 1. Header */
+    .dashboard-header {
+        flex: 0 0 auto;
+    }
+    .welcome-title {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    /* 2. Stats Grid */
+    .dashboard-stats {
+        flex: 0 0 auto;
+    }
+    .stat-card-compact {
+        padding: 0.75rem !important;
+        border-radius: 16px !important;
+    }
+    .stat-icon-box {
+        width: 36px; height: 36px; padding: 0.5rem; margin-right: 0.5rem !important;
+    }
+    .stat-val { font-size: 1.5rem !important; }
+
+    /* 3. Bottom Split - Fills rest of screen */
+    .dashboard-bottom-split {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 50/50 Split */
+        gap: 1rem;
+        min-height: 0;
+    }
+
+    .dashboard-panel-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+        padding: 1rem;
+        overflow: hidden;
+    }
+
+    .panel-header {
+        flex: 0 0 auto;
+        margin-bottom: 1rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .panel-body-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+    /* Hide scrollbar for cleaner look */
+    .panel-body-scroll::-webkit-scrollbar { width: 4px; }
+    .panel-body-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+    /* Governance Buttons Compact */
+    .btn-governance {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Log Items Compact */
+    .log-item-compact {
+        padding-left: 0; padding-right: 0; border: 0; margin-bottom: 0.5rem !important;
+    }
+    .log-title { font-size: 0.9rem; font-weight: bold; }
+    .log-meta { font-size: 0.75rem; }
+
+</style>
+
+<div class="viewport-fit-container">
+    
+    <!-- 1. Header -->
+    <div class="dashboard-header">
+         <h1 class="fw-bold display-5 welcome-title">System Overview 🛡️</h1>
+         <p class="text-muted small mb-0">Operational metrics and controls.</p>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3" style="border-radius: 20px;">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-3 rounded-circle bg-primary bg-opacity-10 text-primary me-3">
-                            <i class="bi bi-people fs-4"></i>
-                        </div>
-                        <h6 class="mb-0 fw-bold">Total Students</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h2 class="mb-0 fw-bold">@(ViewBag.TotalStudentsCount ?? 0)</h2>
-                        <span class="text-success small fw-bold"><i class="bi bi-arrow-up"></i> Live</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3" style="border-radius: 20px;">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-3 rounded-circle bg-warning bg-opacity-10 text-warning me-3">
-                            <i class="bi bi-activity fs-4"></i>
-                        </div>
-                        <h6 class="mb-0 fw-bold">Active Activities</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h2 class="mb-0 fw-bold">@(ViewBag.ActiveActivitiesCount ?? 0)</h2>
-                        <span class="text-muted small">Current</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3" style="border-radius: 20px;">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-3 rounded-circle bg-success bg-opacity-10 text-success me-3">
-                            <i class="bi bi-check2-all fs-4"></i>
-                        </div>
-                        <h6 class="mb-0 fw-bold">Pending Approvals</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h2 class="mb-0 fw-bold">@(ViewBag.PendingCount ?? 0)</h2>
-                        <a asp-action="PendingApprovals" class="text-primary small text-decoration-none fw-bold">View
-                            All</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm p-3" style="border-radius: 20px;">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-3 rounded-circle bg-info bg-opacity-10 text-info me-3">
-                            <i class="bi bi-gear-fill fs-4"></i>
-                        </div>
-                        <h6 class="mb-0 fw-bold">System Status</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h2 class="mb-0 fw-bold text-success fs-4">Operational</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 24px;">
-                <h5 class="fw-bold mb-4">Quick Governance</h5>
-                <div class="d-grid gap-3">
-                    <a asp-action="Users"
-                        class="btn btn-outline-dark rounded-pill py-3 text-start px-4 d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-shield-check me-2"></i> Manage Permissions</span>
-                        <i class="bi bi-chevron-right small"></i>
-                    </a>
-                    <a asp-controller="Activity" asp-action="AddActivity"
-                        class="btn btn-warning rounded-pill py-3 text-start px-4 d-flex justify-content-between align-items-center fw-bold">
-                        <span><i class="bi bi-plus-circle me-2"></i> Create New Activity</span>
-                        <i class="bi bi-chevron-right small"></i>
-                    </a>
-                    <a asp-controller="Activity" asp-action="ManageActivities"
-                        class="btn btn-outline-dark rounded-pill py-3 text-start px-4 d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-list-check me-2"></i> Manage Activities</span>
-                        <i class="bi bi-chevron-right small"></i>
-                    </a>
-                    <a asp-controller="Reward" asp-action="AddReward"
-                        class="btn btn-primary rounded-pill py-3 text-start px-4 d-flex justify-content-between align-items-center fw-bold">
-                        <span><i class="bi bi-gift-fill me-2"></i> Create New Reward</span>
-                        <i class="bi bi-chevron-right small"></i>
-                    </a>
-                    <a asp-controller="Reward" asp-action="ManageRewards"
-                        class="btn btn-outline-dark rounded-pill py-3 text-start px-4 d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-gift me-2"></i> Manage Rewards</span>
-                        <i class="bi bi-chevron-right small"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 24px;">
-                <h5 class="fw-bold mb-4">System Notifications</h5>
-                
-                <!-- Filters -->
-                <div class="mb-3 d-flex gap-2">
-                    <button class="btn btn-sm btn-dark rounded-pill" onclick="filterLogs('all')">All</button>
-                    <button class="btn btn-sm btn-outline-dark rounded-pill" onclick="filterLogs('APPLY')">Applications</button>
-                    <button class="btn btn-sm btn-outline-dark rounded-pill" onclick="filterLogs('COMPLETED')">Completions</button>
-                    <button class="btn btn-sm btn-outline-dark rounded-pill" onclick="filterLogs('REWARD_SPENT')">Spending</button>
-                </div>
-
-                <div class="list-group list-group-flush" style="max-height: 400px; overflow-y: auto;">
-                    @if (ViewBag.Logs != null)
-                    {
-                        @foreach (var log in (List<teduWallet.Models.Log>)ViewBag.Logs)
-                        {
-                            <div class="list-group-item px-0 border-0 mb-3 log-item" data-category="@log.ActionType">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1 fw-bold @(log.ActionType == "APPLY" ? "text-primary" : log.ActionType == "COMPLETED" || log.ActionType == "EARN" ? "text-success" : "text-warning")">
-                                        @if(log.ActionType == "APPLY") { <text>New Application</text> }
-                                        else if(log.ActionType == "COMPLETED" || log.ActionType == "EARN") { <text>Task Completed</text> }
-                                        else if(log.ActionType == "REWARD_SPENT" || log.ActionType == "SPEND") { <text>Reward Redeemed</text> }
-                                        else { @log.ActionType }
-                                    </h6>
-                                    <small class="text-muted">@log.Timestamp?.ToString("MMM dd, HH:mm")</small>
-                                </div>
-                                <p class="mb-1 text-muted small">
-                                    @if(log.ActionType == "APPLY" && log.Student != null && log.Activity != null)
-                                    {
-                                        <text>@log.Student.Name has applied for "@log.Activity.Title".</text>
-                                    }
-                                    else if((log.ActionType == "COMPLETED" || log.ActionType == "EARN") && log.Student != null && log.Activity != null)
-                                    {
-                                        <text>@log.Student.Name completed "@log.Activity.Title".</text>
-                                    }
-                                    else if((log.ActionType == "REWARD_SPENT" || log.ActionType == "SPEND") && log.Student != null && log.Reward != null)
-                                    {
-                                        <text>@log.Student.Name redeemed "@log.Reward.RewardName".</text>
-                                    }
-                                    else
-                                    {
-                                        <text>Action by student ID: @log.StudentId</text>
-                                    }
-                                </p>
+    <!-- 2. Stats -->
+    <div class="dashboard-stats">
+        <div class="row g-3">
+             <div class="col-md-3">
+                <div class="card border-0 shadow-sm stat-card-compact">
+                    <div class="card-body p-0">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary stat-icon-box d-flex align-items-center justify-content-center">
+                                <i class="bi bi-people fs-6"></i>
                             </div>
-                        }
-                    }
-                    else
-                    {
-                         <div class="text-muted text-center py-3">No notifications found.</div>
-                    }
+                            <h6 class="mb-0 fw-bold small text-muted">Students</h6>
+                        </div>
+                        <h2 class="mb-0 fw-bold stat-val">@(ViewBag.TotalStudentsCount ?? 0)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm stat-card-compact">
+                    <div class="card-body p-0">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle bg-warning bg-opacity-10 text-warning stat-icon-box d-flex align-items-center justify-content-center">
+                                <i class="bi bi-activity fs-6"></i>
+                            </div>
+                            <h6 class="mb-0 fw-bold small text-muted">Activities</h6>
+                        </div>
+                        <h2 class="mb-0 fw-bold stat-val">@(ViewBag.ActiveActivitiesCount ?? 0)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm stat-card-compact">
+                    <div class="card-body p-0">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle bg-success bg-opacity-10 text-success stat-icon-box d-flex align-items-center justify-content-center">
+                                <i class="bi bi-check2-all fs-6"></i>
+                            </div>
+                            <h6 class="mb-0 fw-bold small text-muted">Pending</h6>
+                        </div>
+                        <div class="d-flex align-items-baseline justify-content-between">
+                            <h2 class="mb-0 fw-bold stat-val">@(ViewBag.PendingCount ?? 0)</h2>
+                            <a asp-action="PendingApprovals" class="small text-primary text-decoration-none fw-bold">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm stat-card-compact">
+                    <div class="card-body p-0">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle bg-info bg-opacity-10 text-info stat-icon-box d-flex align-items-center justify-content-center">
+                                <i class="bi bi-gear-fill fs-6"></i>
+                            </div>
+                            <h6 class="mb-0 fw-bold small text-muted">Status</h6>
+                        </div>
+                         <h2 class="mb-0 fw-bold text-success stat-val">OK</h2>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- 3. Bottom Split -->
+    <div class="dashboard-bottom-split">
+        
+        <!-- Left: Quick Governance -->
+        <div class="dashboard-panel-card">
+            <div class="panel-header">Quick Governance</div>
+            <div class="d-grid gap-2 overflow-hidden"> <!-- Prevent scroll here -->
+                <a asp-action="Users" class="btn btn-outline-dark rounded-pill btn-governance d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-shield-check me-2"></i> Permissions</span>
+                    <i class="bi bi-chevron-right small"></i>
+                </a>
+                <a asp-controller="Activity" asp-action="AddActivity" class="btn btn-warning rounded-pill btn-governance d-flex justify-content-between align-items-center fw-bold">
+                    <span><i class="bi bi-plus-circle me-2"></i> New Activity</span>
+                    <i class="bi bi-chevron-right small"></i>
+                </a>
+                 <a asp-controller="Activity" asp-action="ManageActivities" class="btn btn-outline-dark rounded-pill btn-governance d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-list-check me-2"></i> Manage Activities</span>
+                    <i class="bi bi-chevron-right small"></i>
+                </a>
+                <a asp-controller="Reward" asp-action="AddReward" class="btn btn-primary rounded-pill btn-governance d-flex justify-content-between align-items-center fw-bold">
+                    <span><i class="bi bi-gift-fill me-2"></i> New Reward</span>
+                    <i class="bi bi-chevron-right small"></i>
+                </a>
+                 <a asp-controller="Reward" asp-action="ManageRewards" class="btn btn-outline-dark rounded-pill btn-governance d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-gift me-2"></i> Manage Rewards</span>
+                    <i class="bi bi-chevron-right small"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right: Notifications -->
+        <div class="dashboard-panel-card">
+            <div class="panel-header d-flex justify-content-between align-items-center">
+                <span>System Log</span>
+                <div class="d-flex gap-1">
+                    <button class="btn btn-xs btn-dark rounded-pill px-2 py-0" style="font-size: 0.7rem;" onclick="filterLogs('all')">All</button>
+                    <button class="btn btn-xs btn-outline-dark rounded-pill px-2 py-0" style="font-size: 0.7rem;" onclick="filterLogs('APPLY')">Apps</button>
+                    <button class="btn btn-xs btn-outline-dark rounded-pill px-2 py-0" style="font-size: 0.7rem;" onclick="filterLogs('COMPLETED')">Done</button>
+                </div>
+            </div>
+            
+            <div class="panel-body-scroll list-group list-group-flush">
+                @if (ViewBag.Logs != null)
+                {
+                    @foreach (var log in (List<teduWallet.Models.Log>)ViewBag.Logs)
+                    {
+                        <div class="list-group-item log-item log-item-compact" data-category="@log.ActionType">
+                            <div class="d-flex w-100 justify-content-between">
+                                <span class="log-title @(log.ActionType == "APPLY" ? "text-primary" : "text-dark")">
+                                    @if(log.ActionType == "APPLY") { <text>New Application</text> }
+                                    else if(log.ActionType == "COMPLETED") { <text>Task Done</text> }
+                                    else { @log.ActionType }
+                                </span>
+                                <small class="text-muted" style="font-size: 0.7rem;">@log.Timestamp?.ToString("HH:mm")</small>
+                            </div>
+                            <p class="mb-0 text-muted log-meta text-truncate">
+                                @if(log.Student != null) { @log.Student.Name } 
+                                @if(log.ActionType == "APPLY") { <text>applied for task.</text> }
+                                else { <text>interaction.</text> }
+                            </p>
+                        </div>
+                    }
+                }
+                else
+                {
+                     <div class="text-muted text-center py-3 small">No logs.</div>
+                }
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -178,22 +252,10 @@
         const items = document.querySelectorAll('.log-item');
         items.forEach(item => {
             if (category === 'all' || item.getAttribute('data-category') === category || 
-               (category === 'COMPLETED' && item.getAttribute('data-category') === 'EARN') || // Handle legacy or mapped types
-               (category === 'REWARD_SPENT' && item.getAttribute('data-category') === 'SPEND')) {
+               (category === 'COMPLETED' && item.getAttribute('data-category') === 'EARN')) {
                 item.style.display = 'block';
             } else {
                 item.style.display = 'none';
-            }
-        });
-        
-        // Update button styles (optional but nice)
-        document.querySelectorAll('button[onclick^="filterLogs"]').forEach(btn => {
-            if(btn.getAttribute('onclick').includes(category)) {
-                btn.classList.remove('btn-outline-dark');
-                btn.classList.add('btn-dark');
-            } else {
-                btn.classList.add('btn-outline-dark');
-                btn.classList.remove('btn-dark');
             }
         });
     }
