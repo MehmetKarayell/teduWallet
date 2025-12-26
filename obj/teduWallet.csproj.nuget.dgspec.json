@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj": {}
+    "/Users/elifsedenyurtseven/teduWallet-4/teduWallet.csproj": {}
   },
   "projects": {
-    "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj": {
+    "/Users/elifsedenyurtseven/teduWallet-4/teduWallet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj",
+        "projectUniqueName": "/Users/elifsedenyurtseven/teduWallet-4/teduWallet.csproj",
         "projectName": "teduWallet",
-        "projectPath": "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj",
-        "packagesPath": "/Users/mehmet/.nuget/packages/",
-        "outputPath": "/Users/mehmet/Desktop/teduWallet/obj/",
+        "projectPath": "/Users/elifsedenyurtseven/teduWallet-4/teduWallet.csproj",
+        "packagesPath": "/Users/elifsedenyurtseven/.nuget/packages/",
+        "outputPath": "/Users/elifsedenyurtseven/teduWallet-4/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/mehmet/.nuget/NuGet/NuGet.Config"
+          "/Users/elifsedenyurtseven/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,7 +32,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -84,6 +90,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.12, 8.0.12]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.osx-arm64",
+              "version": "[8.0.12, 8.0.12]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.12, 8.0.12]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -92,7 +112,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/8.0.4/libexec/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

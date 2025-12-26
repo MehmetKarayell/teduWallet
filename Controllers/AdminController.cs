@@ -126,5 +126,62 @@ namespace teduWallet.Controllers
         System.IO.File.WriteAllLines(_adminFilePath, ids);
       }
     }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteUser(int userId)
+    {
+        try
+        {
+            var student = await _context.Students.FindAsync(userId);
+            if (student == null)
+            {
+                TempData["Error"] = "User not found.";
+                return RedirectToAction("Users");
+            }
+
+            // 1. Remove related WalletSpendsReward records
+            var walletSpends = _context.WalletSpendsRewards.Where(w => w.StudentId == userId);
+            _context.WalletSpendsRewards.RemoveRange(walletSpends);
+
+            // 2. Remove Wallet
+            var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.StudentId == userId);
+            if (wallet != null)
+            {
+                // Also double check for any spending records linked by WalletId if not covered by StudentId
+                var walletSpendsByWallet = _context.WalletSpendsRewards.Where(w => w.WalletId == wallet.WalletId);
+                _context.WalletSpendsRewards.RemoveRange(walletSpendsByWallet);
+                
+                _context.Wallets.Remove(wallet);
+            }
+
+            // 3. Remove Logs
+            var logs = _context.Logs.Where(l => l.StudentId == userId);
+            _context.Logs.RemoveRange(logs);
+
+            // 4. Remove Applies
+            var applies = _context.Applies.Where(a => a.StudentId == userId);
+            _context.Applies.RemoveRange(applies);
+
+            // 5. Remove Completes
+            var completes = _context.Completes.Where(c => c.StudentId == userId);
+            _context.Completes.RemoveRange(completes);
+
+            // 6. Finally remove Student
+            _context.Students.Remove(student);
+
+            await _context.SaveChangesAsync();
+            
+            // Also remove from admin file if they are an admin
+            UpdateAdminFile(userId, false);
+
+            TempData["Success"] = "User deleted successfully.";
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = "Error deleting user: " + ex.Message;
+        }
+
+        return RedirectToAction("Users");
+    }
   }
 }
