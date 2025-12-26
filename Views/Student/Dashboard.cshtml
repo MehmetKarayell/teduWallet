@@ -188,6 +188,75 @@
         flex-shrink: 0;
     }
 
+    /* ===== LEADERBOARD BAR CHART ===== */
+    .leaderboard-bar-chart {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 1.5rem;
+        height: 240px;
+        padding: 1rem;
+    }
+
+    .bar-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 70px;
+    }
+
+    .bar-value {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 6px;
+        white-space: nowrap;
+    }
+
+    .bar {
+        width: 65px;
+        border-radius: 10px 10px 4px 4px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 10px;
+    }
+
+    .bar-rank {
+        font-size: 1rem;
+        font-weight: 800;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+    .bar-name {
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 8px;
+        color: #374151;
+        text-align: center;
+        line-height: 1.2;
+        max-width: 75px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .bar.bar-gold {
+        background: linear-gradient(180deg, #FFD700 0%, #F5C542 50%, #DAA520 100%);
+        box-shadow: 0 4px 12px rgba(245, 197, 66, 0.4);
+    }
+
+    .bar.bar-silver {
+        background: linear-gradient(180deg, #E8E8E8 0%, #C9CCD6 50%, #A8A8A8 100%);
+        box-shadow: 0 4px 12px rgba(168, 168, 168, 0.3);
+    }
+
+    .bar.bar-bronze {
+        background: linear-gradient(180deg, #D4A574 0%, #CD7F32 50%, #A0522D 100%);
+        box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);
+    }
+
     /* Task Table Compact */
     .table-compact th { padding: 0.5rem !important; font-size: 0.8rem; background: #f8f9fa; }
     .table-compact td { padding: 0.5rem !important; font-size: 0.85rem; vertical-align: middle; }
@@ -274,25 +343,43 @@
                    </div>
                }
                else {
-                    <div class="leaderboard-grid">
-                        @{ 
-                            var topStudents = Model.TopStudents.Take(3).ToList();
-                            for(int i = 0; i < topStudents.Count; i++)
-                            {
-                                var student = topStudents[i];
-                                var rankNum = i + 1;
-                                <div class="student-rank-card rank-@rankNum">
-                                    <div class="rank-circle">#@rankNum</div>
-                                    <div class="student-rank-info">
-                                        <p class="student-rank-name">@student.FullName</p>
-                                        <div class="rank-coin-badge">
-                                            @student.WeeklyCoinsEarned?.ToString("N0") <span style="font-size: 0.75em; margin-left:3px; opacity:0.8;">TDC</span>
-                                        </div>
-                                    </div>
+                    var topStudents = Model.TopStudents.Take(3).ToList();
+                    if (topStudents.Count >= 3)
+                    {
+                        var rank1 = topStudents[0];
+                        var rank2 = topStudents[1];
+                        var rank3 = topStudents[2];
+                        var maxCoins = new[] { rank1.WeeklyCoinsEarned ?? 1m, rank2.WeeklyCoinsEarned ?? 1m, rank3.WeeklyCoinsEarned ?? 1m }.Max();
+                        var bar1Height = maxCoins > 0 ? (int)(((rank1.WeeklyCoinsEarned ?? 0) / maxCoins) * 170) : 170;
+                        var bar2Height = maxCoins > 0 ? (int)(((rank2.WeeklyCoinsEarned ?? 0) / maxCoins) * 170) : 130;
+                        var bar3Height = maxCoins > 0 ? (int)(((rank3.WeeklyCoinsEarned ?? 0) / maxCoins) * 170) : 95;
+                        bar1Height = Math.Max(bar1Height, 65);
+                        bar2Height = Math.Max(bar2Height, 55);
+                        bar3Height = Math.Max(bar3Height, 45);
+                        <div class="leaderboard-bar-chart">
+                            <div class="bar-column">
+                                <span class="bar-value">@rank2.WeeklyCoinsEarned?.ToString("N0") TDC</span>
+                                <div class="bar bar-silver" style="height: @(bar2Height)px;">
+                                    <span class="bar-rank">#2</span>
                                 </div>
-                            }
-                        }
-                    </div>
+                                <span class="bar-name">@(rank2.FullName?.Split(' ').FirstOrDefault())</span>
+                            </div>
+                            <div class="bar-column">
+                                <span class="bar-value">@rank1.WeeklyCoinsEarned?.ToString("N0") TDC</span>
+                                <div class="bar bar-gold" style="height: @(bar1Height)px;">
+                                    <span class="bar-rank">#1</span>
+                                </div>
+                                <span class="bar-name">@(rank1.FullName?.Split(' ').FirstOrDefault())</span>
+                            </div>
+                            <div class="bar-column">
+                                <span class="bar-value">@rank3.WeeklyCoinsEarned?.ToString("N0") TDC</span>
+                                <div class="bar bar-bronze" style="height: @(bar3Height)px;">
+                                    <span class="bar-rank">#3</span>
+                                </div>
+                                <span class="bar-name">@(rank3.FullName?.Split(' ').FirstOrDefault())</span>
+                            </div>
+                        </div>
+                    }
                }
             </div>
         </div>
