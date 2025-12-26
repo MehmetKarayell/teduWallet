@@ -39,14 +39,29 @@
                                 <div class="p-3 rounded-circle bg-primary bg-opacity-10 text-primary">
                                     <i class="bi bi-journal-text fs-4"></i>
                                 </div>
-                                @if (isApplied)
-                                {
-                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2 rounded-pill">Applied</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">Open</span>
-                                }
+                                <div class="d-flex flex-column align-items-end gap-1">
+                                    @if (isApplied)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2 rounded-pill">Applied</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">Open</span>
+                                    }
+
+                                    @if (activity.PriorityLevel.HasValue && activity.PriorityLevel > 0)
+                                    {
+                                        var p = activity.PriorityLevel.Value;
+                                        string pText = p <= 3 ? "Low" : p <= 7 ? "Medium" : "High";
+                                        var badgeClass = p <= 3 ? "bg-secondary-subtle text-secondary border-secondary-subtle" :
+                                                         p <= 7 ? "bg-warning-subtle text-warning-emphasis border-warning-subtle" :
+                                                         "bg-danger-subtle text-danger border-danger-subtle";
+                                        
+                                        <span class="badge @badgeClass border rounded-pill fw-normal px-2 py-1" style="font-size: 0.75rem;">
+                                            @pText
+                                        </span>
+                                    }
+                                </div>
                             </div>
                             <h5 class="fw-bold">@activity.Title</h5>
                             <p class="text-muted small mb-4" style="min-height: 4.5em;">
@@ -54,6 +69,7 @@
                             </p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="fw-bold text-primary">@activity.RewardTokenAmount.ToString("N0") Coins</span>
+                                <div>
                                 @if(isApplied) 
                                 {
                                     <button class="btn btn-secondary btn-sm rounded-pill px-4" disabled>Applied</button>
@@ -65,6 +81,7 @@
                                         <button type="submit" class="btn btn-primary btn-sm rounded-pill px-4">Start</button>
                                     </form>
                                 }
+                                </div>
                             </div>
                         </div>
                     </div>
