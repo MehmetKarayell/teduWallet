@@ -18,14 +18,35 @@
             --glass-border: rgba(255, 255, 255, 0.3);
             --sidebar-bg: rgba(15, 23, 42, 0.95);
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --sidebar-width: 250px;
         }
         
-        .admin-sidebar {
-            background: var(--sidebar-bg);
-            color: #fff;
-            min-height: 100vh;
+        body {
+            background-color: #f8f9fa;
         }
 
+        /* FIXED SIDEBAR */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            color: #fff;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        /* MAIN CONTENT OFFSET */
+        #page-content-wrapper {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Sidebar Styling */
         .brand-purple {
             background: var(--primary-gradient);
             -webkit-background-clip: text;

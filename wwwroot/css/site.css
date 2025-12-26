@@ -14274,3 +14274,16 @@ html, body, .auth-body, .auth-container, .auth-visual, .auth-form-side {
     }
 }
 
+
+/* GLOBAL SCROLL FIX */
+html, body {
+    overflow-y: auto !important;
+    min-height: 100vh !important;
+    height: auto !important;
+}
+
+/* Ensure main containers allow scrolling */
+.container, .container-fluid, .main-container {
+    overflow: visible !important;
+    height: auto !important;
+}
