@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("teduWallet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f6c074f73a1b1cb1dd53e7294aacafa015d6795")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+44f0c67b75658a28a59e53e9f0ba1c5d62c304f1")]
 [assembly: System.Reflection.AssemblyProductAttribute("teduWallet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("teduWallet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

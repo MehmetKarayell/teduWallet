@@ -50,7 +50,10 @@
         border-radius: 16px !important;
     }
     .stat-icon-box {
-        width: 36px; height: 36px; padding: 0.5rem; margin-right: 0.5rem !important;
+        width: 40px; 
+        height: 40px; 
+        padding: 0.5rem; 
+        margin-right: 0.75rem !important;
     }
     .stat-val { font-size: 1.5rem !important; }
 
@@ -94,7 +97,29 @@
     .btn-governance {
         padding: 0.75rem 1rem !important;
         font-size: 0.9rem !important;
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; /* Soft shadow */
+        border: 0 !important; /* Cleaner look */
+        transition: transform 0.2s;
     }
+    .btn-governance:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Governance Colors */
+    .btn-gov-permissions { background-color: #3b82f6 !important; color: white !important; } /* Blue */
+    .btn-gov-permissions:hover { background-color: #2563eb !important; color: white !important; }
+
+    .btn-gov-new-activity { background-color: #facc15 !important; color: #1e293b !important; } /* Yellow */
+    .btn-gov-new-activity:hover { background-color: #eab308 !important; color: #1e293b !important; } /* darker yellow on hover */
+
+    .btn-gov-manage-activities { background-color: #f97316 !important; color: white !important; } /* Orange */
+    .btn-gov-manage-activities:hover { background-color: #ea580c !important; color: white !important; }
+
+    .btn-gov-new-reward { background-color: #a855f7 !important; color: white !important; } /* Purple */
+    .btn-gov-new-reward:hover { background-color: #9333ea !important; color: white !important; }
+
+    .btn-gov-manage-rewards { background-color: #22c55e !important; color: white !important; } /* Green */
+    .btn-gov-manage-rewards:hover { background-color: #16a34a !important; color: white !important; }
 
     /* Log Items Compact */
     .log-item-compact {
@@ -181,23 +206,23 @@
         <div class="dashboard-panel-card">
             <div class="panel-header">Quick Governance</div>
             <div class="d-grid gap-2 overflow-hidden"> <!-- Prevent scroll here -->
-                <a asp-action="Users" class="btn btn-outline-dark rounded-pill btn-governance d-flex justify-content-between align-items-center">
+                <a asp-action="Users" class="btn btn-gov-permissions rounded-pill btn-governance d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-shield-check me-2"></i> Permissions</span>
                     <i class="bi bi-chevron-right small"></i>
                 </a>
-                <a asp-controller="Activity" asp-action="AddActivity" class="btn btn-warning rounded-pill btn-governance d-flex justify-content-between align-items-center fw-bold">
+                <a asp-controller="Activity" asp-action="AddActivity" class="btn btn-gov-new-activity rounded-pill btn-governance d-flex justify-content-between align-items-center fw-bold">
                     <span><i class="bi bi-plus-circle me-2"></i> New Activity</span>
                     <i class="bi bi-chevron-right small"></i>
                 </a>
-                 <a asp-controller="Activity" asp-action="ManageActivities" class="btn btn-outline-dark rounded-pill btn-governance d-flex justify-content-between align-items-center">
+                 <a asp-controller="Activity" asp-action="ManageActivities" class="btn btn-gov-manage-activities rounded-pill btn-governance d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-list-check me-2"></i> Manage Activities</span>
                     <i class="bi bi-chevron-right small"></i>
                 </a>
-                <a asp-controller="Reward" asp-action="AddReward" class="btn btn-primary rounded-pill btn-governance d-flex justify-content-between align-items-center fw-bold">
+                <a asp-controller="Reward" asp-action="AddReward" class="btn btn-gov-new-reward rounded-pill btn-governance d-flex justify-content-between align-items-center fw-bold">
                     <span><i class="bi bi-gift-fill me-2"></i> New Reward</span>
                     <i class="bi bi-chevron-right small"></i>
                 </a>
-                 <a asp-controller="Reward" asp-action="ManageRewards" class="btn btn-outline-dark rounded-pill btn-governance d-flex justify-content-between align-items-center">
+                 <a asp-controller="Reward" asp-action="ManageRewards" class="btn btn-gov-manage-rewards rounded-pill btn-governance d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-gift me-2"></i> Manage Rewards</span>
                     <i class="bi bi-chevron-right small"></i>
                 </a>

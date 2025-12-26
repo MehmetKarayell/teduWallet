@@ -12,33 +12,85 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/admin-style.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --sidebar-bg: rgba(15, 23, 42, 0.95);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        }
+        
+        .admin-sidebar {
+            background: var(--sidebar-bg);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .brand-purple {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+            background: transparent !important;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-radius: 8px;
+        }
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #fff !important;
+        }
+
+        .sidebar-link.active {
+            background: var(--primary-gradient) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .top-navbar {
+            padding: 1rem 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
     <div class="d-flex" id="wrapper">
-        <div class="bg-dark text-white" id="sidebar-wrapper" style="min-width: 250px; min-height: 100vh;">
-            <div class="sidebar-heading p-4 fs-4 border-bottom">
-                <span class="text-warning">TEDU</span> Admin Panel
+        <div class="admin-sidebar text-white" id="sidebar-wrapper" style="min-width: 250px; min-height: 100vh;">
+            <div class="sidebar-heading p-4 fs-4 border-bottom border-secondary">
+                <span class="brand-purple">TEDU</span> <span class="text-warning">Admin Panel</span>
             </div>
             <div class="list-group list-group-flush p-3">
                 <a asp-controller="Admin" asp-action="Dashboard"
-                    class="list-group-item list-group-item-action bg-dark text-white border-0">
+                    class="list-group-item list-group-item-action border-0 sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
                     <i class="bi bi-speedometer2 me-2"></i> Dashboard
                 </a>
                 <a asp-controller="Admin" asp-action="Users"
-                    class="list-group-item list-group-item-action bg-dark text-white border-0">
+                    class="list-group-item list-group-item-action border-0 sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")">
                     <i class="bi bi-people me-2"></i> User Management
                 </a>
                 <a asp-controller="Activity" asp-action="ManageActivities"
-                    class="list-group-item list-group-item-action bg-dark text-white border-0">
+                    class="list-group-item list-group-item-action border-0 sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "ManageActivities" ? "active" : "")">
                     <i class="bi bi-list-check me-2"></i> Manage Activities
                 </a>
                 <a asp-controller="Reward" asp-action="ManageRewards"
-                    class="list-group-item list-group-item-action bg-dark text-white border-0">
+                    class="list-group-item list-group-item-action border-0 sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "ManageRewards" ? "active" : "")">
                     <i class="bi bi-gift me-2"></i> Manage Rewards
                 </a>
                 <a asp-controller="Admin" asp-action="PendingApprovals"
-                    class="list-group-item list-group-item-action bg-dark text-white border-0 d-flex justify-content-between align-items-center">
+                    class="list-group-item list-group-item-action border-0 sidebar-link d-flex justify-content-between align-items-center @(ViewContext.RouteData.Values["action"]?.ToString() == "PendingApprovals" ? "active" : "")">
                     <span><i class="bi bi-check-circle me-2"></i> Activity Approvals</span>
                     @if (pendingCount > 0)
                     {
@@ -56,7 +108,7 @@
         </div>
 
         <div id="page-content-wrapper" class="w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 py-3">
+            <nav class="top-navbar">
                 <span class="navbar-text fw-bold">Welcome, @User.Identity.Name</span>
             </nav>
             <div class="container-fluid p-4">
