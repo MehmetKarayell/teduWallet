@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0l7+tVLxCDoNi+3X8Z7V+PyctJCapMNQWm6P6nHEYOimvyGjRsR5FBmQeACtNcp3+p/zIOXW+oZOqG6u1N7s/A==",
+  "dgSpecHash": "HA/g/3ll1ZbnUOKhQURu2gKQxqIeC9BhTTF4yCjeh4VZvvzpcf6TYy4b5LS7pnnqQ8zZ43XaxoZ+B+5LehFGrw==",
   "success": true,
-  "projectFilePath": "/Users/mehmet/Desktop/TEDUWallet-user/teduWallet/teduWallet.csproj",
+  "projectFilePath": "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj",
   "expectedPackageFiles": [
     "/Users/mehmet/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/Users/mehmet/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",

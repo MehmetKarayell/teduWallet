@@ -3,146 +3,267 @@
     ViewData["Title"] = "Student Dashboard";
 }
 
-<div class="container-fluid">
-    <!-- Welcome Header -->
-    <div class="row mb-5">
-        <div class="col-md-8">
-            <h1 class="fw-bold display-5 mb-2">Hello, @(Model.FullName)! 👋</h1>
-            <p class="text-muted fs-5">Welcome back to your TEDU Wallet. Here's what's happening today.</p>
+<style>
+    /* STRICT VIEWPORT LOCK */
+    /* Override global body scroll availability for this page context */
+    :root {
+        --header-height: auto;
+        --stats-height: auto;
+        --gap-size: 0.75rem;
+    }
+    
+    /* Force main body of layout to not scroll and fit height */
+    .main-body {
+        height: calc(100vh - 85px) !important; /* Approx navbar height subtraction */
+        overflow: hidden !important;
+        padding: 1rem !important;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Dashboard Container */
+    .dashboard-viewport-lock {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-size);
+        overflow: hidden;
+    }
+
+    /* 1. Header Section - Compact */
+    .dashboard-header {
+        flex: 0 0 auto;
+    }
+    .welcome-title {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    .welcome-text {
+        font-size: 0.9rem !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* 2. Stats Section - Compact Row */
+    .stats-container {
+        flex: 0 0 auto;
+    }
+    .stat-card {
+        padding: 0.75rem !important;
+        border-radius: 16px !important;
+    }
+    .stat-icon-box {
+        width: 40px; 
+        height: 40px; 
+        padding: 0.5rem !important;
+        margin-right: 0.75rem !important;
+    }
+    .stat-icon { font-size: 1.25rem !important; }
+    .stat-label { font-size: 0.85rem !important; }
+    .stat-value { font-size: 1.5rem !important; }
+    .stat-unit { font-size: 0.85rem !important; }
+
+    /* 3. Bottom Split Section (Leaderboard & Tasks) - Fills remaining height */
+    .bottom-split {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 35% 64%; /* Leaderboard smaller, Tasks wider */
+        gap: 1%;
+        min-height: 0; /* Critical for nested overflow hidden */
+    }
+
+    /* Cards in bottom split */
+    .content-card-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px !important;
+        overflow: hidden;
+        border: 0 !important;
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+        background: white;
+        padding: 1rem !important;
+    }
+
+    .content-header {
+        flex: 0 0 auto;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .content-title { font-size: 1.1rem !important; margin: 0 !important; font-weight: 700; }
+    
+    /* Scrollable areas INSIDE cards if absolutely necessary? 
+       Prompt says "No internal scrollbars". 
+       So we must clip content or fit it. 
+       We will use overflow: hidden strict to comply with "No internal scrollbars" rule. 
+    */
+    .content-body-strict {
+        flex: 1;
+        overflow: hidden; 
+        position: relative;
+    }
+
+    /* Leaderboard Adjustments */
+    .leaderboard-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .student-rank-card {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+    }
+    .student-rank-info { margin-left: 0.75rem; flex: 1; text-align: left; }
+    .student-rank-name { font-weight: bold; font-size: 0.9rem; margin: 0; }
+    .student-rank-coins { font-size: 0.8rem; margin: 0; }
+
+    /* Task Table Compact */
+    .table-compact th { padding: 0.5rem !important; font-size: 0.8rem; background: #f8f9fa; }
+    .table-compact td { padding: 0.5rem !important; font-size: 0.85rem; vertical-align: middle; }
+    .btn-super-compact { padding: 0.25rem 0.75rem !important; font-size: 0.75rem !important; }
+
+</style>
+
+<div class="dashboard-viewport-lock">
+    
+    <!-- 1. Compact Header -->
+    <div class="dashboard-header">
+        <h1 class="fw-bold display-5 welcome-title">Hello, @(Model.FullName)! 👋</h1>
+        <p class="text-muted welcome-text">Your activity overview.</p>
+    </div>
+
+    <!-- 2. Compact Stats -->
+    <div class="stats-container">
+        <div class="row g-3"> <!-- g-3 reduced from g-4 -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm stat-card">
+                    <div class="card-body p-0">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary stat-icon-box d-flex align-items-center justify-content-center">
+                                <i class="bi bi-coin stat-icon"></i>
+                            </div>
+                            <h6 class="mb-0 fw-bold text-muted stat-label">Balance</h6>
+                        </div>
+                        <div class="d-flex align-items-baseline gap-2">
+                            <h2 class="mb-0 fw-bold text-primary stat-value">@(Model.Balance.ToString("N0"))</h2>
+                            <span class="text-primary fw-medium stat-unit">TDC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm stat-card h-100">
+                    <div class="card-body p-0">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle bg-success bg-opacity-10 text-success stat-icon-box d-flex align-items-center justify-content-center">
+                                <i class="bi bi-check2-all stat-icon"></i>
+                            </div>
+                            <h6 class="mb-0 fw-bold text-muted stat-label">Tasks Done</h6>
+                        </div>
+                        <h2 class="mb-0 fw-bold text-success stat-value">@(Model.CompletedTasksCount)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm stat-card h-100">
+                    <div class="card-body p-0">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rounded-circle bg-warning bg-opacity-10 text-warning stat-icon-box d-flex align-items-center justify-content-center">
+                                <i class="bi bi-gift stat-icon"></i>
+                            </div>
+                            <h6 class="mb-0 fw-bold text-muted stat-label">Rewards</h6>
+                        </div>
+                        <h2 class="mb-0 fw-bold text-warning stat-value">@(Model.AvailableRewardsCount)</h2>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-3" style="border-radius: 20px;">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-3 rounded-circle bg-primary bg-opacity-10 text-primary me-3">
-                            <i class="bi bi-coin fs-4"></i>
-                        </div>
-                        <h6 class="mb-0 fw-bold text-muted">Current Balance</h6>
-                    </div>
-                    <div class="d-flex align-items-baseline gap-2">
-                        <h2 class="mb-0 fw-bold text-primary">@(Model.Balance.ToString("N0"))</h2>
-                        <span class="text-primary fw-medium">TDC</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 24px;">
-                <div class="card-body p-0">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-3 rounded-circle bg-success bg-opacity-10 text-success me-3">
-                            <i class="bi bi-check2-all fs-4"></i>
-                        </div>
-                        <h6 class="mb-0 fw-bold text-muted">Tasks Completed</h6>
-                    </div>
-                    <h2 class="mb-0 fw-bold text-success">@(Model.CompletedTasksCount)</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 24px;">
-                <div class="card-body p-0">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="p-3 rounded-circle bg-warning bg-opacity-10 text-warning me-3">
-                            <i class="bi bi-gift fs-4"></i>
-                        </div>
-                        <h6 class="mb-0 fw-bold text-muted">Available Rewards</h6>
-                    </div>
-                    <h2 class="mb-0 fw-bold text-warning">@(Model.AvailableRewardsCount)</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Leaderboard Section -->
-    <div class="row mb-5">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm p-4" style="border-radius: 24px; background: white;">
-                <div class="d-flex align-items-center mb-4 border-bottom pb-3">
-                    <div class="icon-box bg-warning text-white rounded-circle p-2 me-3 shadow-sm d-flex align-items-center justify-content-center" style="width:50px; height:50px;">
-                         <i class="bi bi-trophy-fill fs-5"></i>
+    <!-- 3. Bottom Split: Leaderboard & Tasks -->
+    <div class="bottom-split">
+        
+        <!-- Left: Rankings -->
+        <div class="content-card-wrapper">
+            <div class="content-header border-bottom pb-2">
+                <div class="d-flex align-items-center">
+                    <div class="bg-warning text-white rounded-circle p-1 me-2 d-flex align-items-center justify-content-center" style="width:30px; height:30px;">
+                         <i class="bi bi-trophy-fill small"></i>
                     </div>
                     <div>
-                        <h4 class="mb-0 fw-bold">🏆 Weekly Leaderboard</h4>
-                        <p class="text-muted mb-0 small">Top 3 students with the most earnings this week</p>
+                        <h4 class="content-title">Leaderboard</h4>
                     </div>
                 </div>
-                
-                <div class="row g-3">
-                   @if(!Model.TopStudents.Any()) {
-                       <div class="col-12 text-center py-4">
-                           <p class="text-muted fst-italic">No rankings available for this week yet. Start earning!</p>
-                       </div>
-                   }
-                   else {
-                       @foreach(var student in Model.TopStudents) {
-                           <div class="col-md-4">
-                               <div class="card border-0 shadow-sm h-100 p-3 text-center bg-light">
-                                   <div class="card-body">
-                                       <div class="mb-2">
-                                           <i class="bi bi-person-circle fs-1 text-secondary"></i>
-                                       </div>
-                                       <h5 class="fw-bold text-dark mb-1">@student.FullName</h5>
-                                       <div class="badge bg-warning text-dark rounded-pill px-3 py-2 mt-2">
-                                           <i class="bi bi-lightning-fill"></i> @(student.WeeklyCoinsEarned?.ToString("N0") ?? "0") TDC
-                                       </div>
-                                   </div>
+            </div>
+            
+            <div class="content-body-strict">
+               @if(!Model.TopStudents.Any()) {
+                   <div class="d-flex align-items-center justify-content-center h-100">
+                       <p class="text-muted small fst-italic mb-0">No stats yet.</p>
+                   </div>
+               }
+               else {
+                   <div class="leaderboard-grid">
+                       @foreach(var student in Model.TopStudents.Take(3)) {
+                           <div class="student-rank-card">
+                               <i class="bi bi-person-circle fs-4 text-secondary"></i>
+                               <div class="student-rank-info">
+                                   <p class="student-rank-name">@student.FullName</p>
+                                   <span class="badge bg-warning text-dark rounded-pill px-2 py-0 border border-warning">
+                                       @student.WeeklyCoinsEarned?.ToString("N0")
+                                   </span>
                                </div>
                            </div>
                        }
-                   }
-                </div>
+                   </div>
+               }
             </div>
         </div>
-    </div>
 
-    <!-- Active Tasks -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm p-4" style="border-radius: 24px;">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="fw-bold mb-0">This Week's Campus Tasks</h5>
-                    <a asp-action="Tasks" class="btn btn-light btn-sm rounded-pill px-3">View All</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="bg-light">
+        <!-- Right: Active Tasks (Table) -->
+        <div class="content-card-wrapper">
+            <div class="content-header pb-2">
+                <h5 class="content-title">Campus Tasks</h5>
+                <a asp-action="Tasks" class="btn btn-light btn-sm rounded-pill px-3 py-1" style="font-size: 0.75rem;">All</a>
+            </div>
+            <div class="content-body-strict">
+                <div class="table-responsive h-100">
+                    <table class="table table-hover align-middle table-compact mb-0">
+                        <thead class="bg-light sticky-top">
                             <tr>
-                                <th class="border-0 px-4 py-3">Task Name</th>
-                                <th class="border-0 py-3">Organizer</th>
-                                <th class="border-0 py-3">Reward</th>
-                                <th class="border-0 py-3">Deadline</th>
-                                <th class="border-0 px-4 py-3 text-end">Action</th>
+                                <th class="border-0 rounded-start">Task</th>
+                                <th class="border-0">Reward</th>
+                                <th class="border-0">Due</th>
+                                <th class="border-0 text-end rounded-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (!Model.ActiveActivities.Any())
                             {
                                 <tr>
-                                    <td colspan="5" class="text-center py-5 text-muted">
-                                        No active tasks available right now.
+                                    <td colspan="4" class="text-center py-4 text-muted small">
+                                        No active tasks.
                                     </td>
                                 </tr>
                             }
                             else
                             {
-                                @foreach (var activity in Model.ActiveActivities)
+                                @foreach (var activity in Model.ActiveActivities.Take(4)) /* Limit to 4 to prevent overflow */
                                 {
                                     <tr>
-                                        <td class="px-4 fw-bold">@activity.Title</td>
-                                        <td>@activity.Admin.Name @activity.Admin.Surname</td>
-                                        <td><span class="text-success fw-bold">+@activity.RewardTokenAmount TDC</span></td>
-                                        <td class="text-muted">@(activity.Deadline?.ToString("MMM dd, yyyy") ?? "No Deadline")
-                                        </td>
-                                        <td class="text-end px-4">
-                                            <form asp-action="Apply" method="post">
+                                        <td class="fw-bold text-truncate" style="max-width: 150px;">@activity.Title</td>
+                                        <td><span class="text-success fw-bold small">+@activity.RewardTokenAmount</span></td>
+                                        <td class="text-muted small">@(activity.Deadline?.ToString("MMM dd") ?? "-")</td>
+                                        <td class="text-end">
+                                            <form asp-action="Apply" method="post" class="d-inline">
                                                 <input type="hidden" name="activityId" value="@activity.ActivityId" />
                                                 <button type="submit"
-                                                    class="btn btn-primary btn-sm rounded-pill px-4">Apply</button>
+                                                    class="btn btn-primary btn-super-compact rounded-pill">Apply</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -153,5 +274,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>

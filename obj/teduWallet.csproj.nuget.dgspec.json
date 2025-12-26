@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mehmet/Desktop/TEDUWallet-user/teduWallet/teduWallet.csproj": {}
+    "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj": {}
   },
   "projects": {
-    "/Users/mehmet/Desktop/TEDUWallet-user/teduWallet/teduWallet.csproj": {
+    "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mehmet/Desktop/TEDUWallet-user/teduWallet/teduWallet.csproj",
+        "projectUniqueName": "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj",
         "projectName": "teduWallet",
-        "projectPath": "/Users/mehmet/Desktop/TEDUWallet-user/teduWallet/teduWallet.csproj",
+        "projectPath": "/Users/mehmet/Desktop/teduWallet/teduWallet.csproj",
         "packagesPath": "/Users/mehmet/.nuget/packages/",
-        "outputPath": "/Users/mehmet/Desktop/TEDUWallet-user/teduWallet/obj/",
+        "outputPath": "/Users/mehmet/Desktop/teduWallet/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/mehmet/.nuget/NuGet/NuGet.Config"
