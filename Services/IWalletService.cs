@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using teduWallet.Models;
+using teduWallet.Models.ViewModels;
 
 namespace teduWallet.Services
 {
@@ -28,5 +29,6 @@ namespace teduWallet.Services
     Task<List<Log>> GetTransactionHistory(int studentId);
     Task<List<Log>> GetAllLogs();
     Task<List<WalletSpendsReward>> GetStudentRewards(int studentId);
+    Task<List<BalanceHistoryPoint>> GetBalanceHistory(int studentId);
   }
 }

@@ -141,11 +141,13 @@ namespace teduWallet.Controllers
       {
           var balance = await _walletService.GetBalance(studentId);
           var history = await _walletService.GetTransactionHistory(studentId);
+          var balanceHistory = await _walletService.GetBalanceHistory(studentId);
 
           var viewModel = new StudentWalletViewModel
           {
               Balance = balance,
-              TransactionHistory = history
+              TransactionHistory = history,
+              BalanceHistory = balanceHistory
           };
           return View(viewModel);
       }

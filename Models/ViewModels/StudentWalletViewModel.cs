@@ -7,5 +7,6 @@ namespace teduWallet.Models.ViewModels
     {
         public decimal Balance { get; set; }
         public List<Log> TransactionHistory { get; set; } = new List<Log>();
+        public List<BalanceHistoryPoint> BalanceHistory { get; set; } = new List<BalanceHistoryPoint>();
     }
 }

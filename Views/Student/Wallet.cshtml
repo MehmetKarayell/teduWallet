@@ -27,6 +27,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; height: 100%;">
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="mb-3">
+                        <h5 class="fw-bold mb-1">Balance History</h5>
+                        <p class="text-muted small mb-0">Wallet balance over time</p>
+                    </div>
+                    <div class="flex-grow-1" style="min-height: 200px;">
+                        <canvas id="balanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Transaction History -->
@@ -96,3 +109,95 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('balanceChart').getContext('2d');
+            
+            const chartData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BalanceHistory));
+            
+            const labels = chartData.map(item => item.Date || item.date);
+            const data = chartData.map(item => item.Balance ?? item.balance);
+            
+            // Handle empty data case
+            if (labels.length === 0) {
+                labels.push('No Data');
+                data.push(0);
+            }
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Balance (TDC)',
+                        data: data,
+                        borderColor: '#a855f7',
+                        backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#a855f7',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            padding: 12,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toLocaleString() + ' TDC';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#919aa1',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                color: '#919aa1',
+                                font: {
+                                    size: 11
+                                },
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' TDC';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+

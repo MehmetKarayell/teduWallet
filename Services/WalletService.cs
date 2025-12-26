@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using System.Collections.Generic;
 using System.Linq;
+using teduWallet.Models.ViewModels;
 
 namespace teduWallet.Services
 {
@@ -186,6 +187,45 @@ namespace teduWallet.Services
           .Where(w => w.StudentId == studentId)
           .OrderByDescending(w => w.SpentDate)
           .ToListAsync();
+    }
+
+    public async Task<List<BalanceHistoryPoint>> GetBalanceHistory(int studentId)
+    {
+      // Fetch all logs for the student, ordered by date ascending
+      var logs = await _context.Logs
+          .Include(l => l.Activity)
+          .Include(l => l.Reward)
+          .Where(l => l.StudentId == studentId && l.Timestamp.HasValue)
+          .OrderBy(l => l.Timestamp)
+          .ToListAsync();
+
+      // Calculate cumulative balance per transaction (no aggregation)
+      var result = new List<BalanceHistoryPoint>();
+      decimal runningBalance = 0;
+
+      foreach (var log in logs)
+      {
+          // Calculate transaction amount
+          decimal amount;
+          if (log.ActionType == "EARN" || log.ActionType == "COMPLETED")
+          {
+              amount = log.Activity?.RewardTokenAmount ?? 0;
+          }
+          else
+          {
+              amount = -(log.Reward?.Cost ?? 0);
+          }
+
+          runningBalance += amount;
+
+          result.Add(new BalanceHistoryPoint
+          {
+              Date = log.Timestamp!.Value.ToString("MMM dd HH:mm"),
+              Balance = runningBalance
+          });
+      }
+
+      return result;
     }
   }
 }
