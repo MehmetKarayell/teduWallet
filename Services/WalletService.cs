@@ -148,7 +148,9 @@ namespace teduWallet.Services
     }
     public async Task<List<VwTop3StudentsThisWeek>> GetTopStudentsThisWeek()
     {
-      return await _context.VwTop3StudentsThisWeeks.ToListAsync();
+      return await _context.VwTop3StudentsThisWeeks
+          .OrderByDescending(s => s.WeeklyCoinsEarned)
+          .ToListAsync();
     }
 
     public async Task<List<Reward>> GetAvailableRewards()

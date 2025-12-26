@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uv4+BmFy6dQ=",
+  "dgSpecHash": "h67DmrYsJIE=",
   "success": true,
-  "projectFilePath": "/Users/elifsedenyurtseven/teduWallet-4/teduWallet.csproj",
+  "projectFilePath": "/Users/elifsedenyurtseven/teduWallet-5/teduWallet.csproj",
   "expectedPackageFiles": [
     "/Users/elifsedenyurtseven/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/Users/elifsedenyurtseven/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",

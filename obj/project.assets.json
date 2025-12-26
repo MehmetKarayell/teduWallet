@@ -4313,11 +4313,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/elifsedenyurtseven/teduWallet-4/teduWallet.csproj",
+      "projectUniqueName": "/Users/elifsedenyurtseven/teduWallet-5/teduWallet.csproj",
       "projectName": "teduWallet",
-      "projectPath": "/Users/elifsedenyurtseven/teduWallet-4/teduWallet.csproj",
+      "projectPath": "/Users/elifsedenyurtseven/teduWallet-5/teduWallet.csproj",
       "packagesPath": "/Users/elifsedenyurtseven/.nuget/packages/",
-      "outputPath": "/Users/elifsedenyurtseven/teduWallet-4/obj/",
+      "outputPath": "/Users/elifsedenyurtseven/teduWallet-5/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/elifsedenyurtseven/.nuget/NuGet/NuGet.Config"
