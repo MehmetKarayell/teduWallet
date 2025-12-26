@@ -1,0 +1,126 @@
+@model teduWallet.Models.Activity
+@{
+  ViewData["Title"] = "Add New Activity";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-dark text-white p-4">
+          <div class="d-flex align-items-center">
+            <div class="icon-box bg-warning text-dark rounded-3 p-3 me-3">
+              <i class="bi bi-plus-circle-fill fs-3"></i>
+            </div>
+            <div>
+              <h2 class="mb-0 fw-bold">Create New Activity</h2>
+              <p class="text-secondary mb-0">Define a new task or event for students to earn coins.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-5">
+          <form asp-action="AddActivity" method="post" class="needs-validation">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4 rounded-3"></div>
+
+            <div class="row g-4">
+              <!-- Title -->
+              <div class="col-12">
+                <label asp-for="Title" class="form-label fw-bold text-dark">Activity Title</label>
+                <input asp-for="Title" class="form-control form-control-lg border-2 rounded-3 shadow-sm bg-light"
+                  placeholder="e.g., Campus Cleanup Drive" required />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+              </div>
+
+              <!-- Description -->
+              <div class="col-12">
+                <label asp-for="Description" class="form-label fw-bold text-dark">Description</label>
+                <textarea asp-for="Description" class="form-control border-2 rounded-3 shadow-sm bg-light" rows="4"
+                  placeholder="Briefly describe what students need to do..."></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+              </div>
+
+              <!-- Reward Token Amount -->
+              <div class="col-md-6">
+                <label asp-for="RewardTokenAmount" class="form-label fw-bold text-dark">Reward Coins</label>
+                <div class="input-group">
+                  <span class="input-group-text border-2 rounded-start-3 bg-warning-subtle text-warning-emphasis">
+                    <i class="bi bi-coin"></i>
+                  </span>
+                  <input asp-for="RewardTokenAmount" type="number"
+                    class="form-control form-control-lg border-2 rounded-end-3 shadow-sm bg-light" placeholder="0"
+                    required />
+                </div>
+                <span asp-validation-for="RewardTokenAmount" class="text-danger small"></span>
+              </div>
+
+              <!-- Max Participants -->
+              <div class="col-md-6">
+                <label asp-for="MaxParticipants" class="form-label fw-bold text-dark">Max Participants</label>
+                <div class="input-group">
+                  <span class="input-group-text border-2 rounded-start-3 bg-primary-subtle text-primary-emphasis">
+                    <i class="bi bi-people-fill"></i>
+                  </span>
+                  <input asp-for="MaxParticipants" type="number"
+                    class="form-control form-control-lg border-2 rounded-end-3 shadow-sm bg-light" placeholder="0"
+                    required />
+                </div>
+                <span asp-validation-for="MaxParticipants" class="text-danger small"></span>
+              </div>
+
+              <!-- Deadline -->
+              <div class="col-md-6">
+                <label asp-for="Deadline" class="form-label fw-bold text-dark">Deadline</label>
+                <input asp-for="Deadline" type="date"
+                  class="form-control form-control-lg border-2 rounded-3 shadow-sm bg-light" required />
+                <span asp-validation-for="Deadline" class="text-danger small"></span>
+              </div>
+
+              <!-- Priority Level -->
+              <div class="col-md-6">
+                <label asp-for="PriorityLevel" class="form-label fw-bold text-dark">Priority Level (1-10)</label>
+                <input asp-for="PriorityLevel" type="number" min="1" max="10"
+                  class="form-control form-control-lg border-2 rounded-3 shadow-sm bg-light" value="1" />
+                <span asp-validation-for="PriorityLevel" class="text-danger small"></span>
+              </div>
+            </div>
+
+            <div class="mt-5 d-flex gap-3">
+              <button type="submit"
+                class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm transition-all hover-scale flex-grow-1">
+                <i class="bi bi-check-circle-fill me-2"></i> Publish Activity
+              </button>
+              <a asp-controller="Admin" asp-action="Dashboard"
+                class="btn btn-outline-secondary btn-lg px-4 py-3 rounded-pill fw-bold">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+  }
+
+  .hover-scale:hover {
+    transform: translateY(-2px);
+  }
+
+  .transition-all {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+  }
+</style>

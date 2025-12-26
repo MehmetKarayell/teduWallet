@@ -1,0 +1,98 @@
+@model teduWallet.Models.ViewModels.StudentWalletViewModel
+@{
+    ViewData["Title"] = "My Wallet";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">My Wallet</h2>
+            <p class="text-muted">Manage your TEDU coins and transaction history.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 text-white shadow" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); border-radius: 24px;">
+                <div class="card-body p-5">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <i class="bi bi-wallet2 fs-1"></i>
+                        <span class="opacity-75">TEDU Student Card</span>
+                    </div>
+                    <div class="mb-4">
+                        <p class="mb-0 opacity-75">Available Balance</p>
+                        <h1 class="display-4 fw-bold mb-0">@Model.Balance.ToString("N0") <small class="fs-4">TDC</small></h1>
+                    </div>
+                    <p class="mb-0 small opacity-75">Card Holder: @User.Identity.Name</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 24px;">
+                <h5 class="fw-bold mb-4">Transaction History</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0 px-4 py-3">Date</th>
+                                <th class="border-0 py-3">Type</th>
+                                <th class="border-0 py-3">Description</th>
+                                <th class="border-0 px-4 py-3 text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.TransactionHistory.Any())
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-5 text-muted">
+                                        No transactions found.
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var log in Model.TransactionHistory)
+                                {
+                                    <tr>
+                                        <td class="px-4 text-muted">@(log.Timestamp?.ToString("MMM dd, yyyy HH:mm") ?? "-")</td>
+                                        <td>
+                                            @if (log.ActionType == "EARN" || log.ActionType == "COMPLETED")
+                                            {
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">Received</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3">Spent</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if(log.ActionType == "EARN" || log.ActionType == "COMPLETED") {
+                                                <span>Completed task: <strong>@(log.Activity?.Title ?? "Unknown Activity")</strong></span>
+                                            } else {
+                                                <span>Redeemed reward: <strong>@(log.Reward?.RewardName ?? "Unknown Reward")</strong></span>
+                                            }
+                                        </td>
+                                        <td class="text-end px-4">
+                                            @if (log.ActionType == "EARN" || log.ActionType == "COMPLETED")
+                                            {
+                                                <span class="fw-bold text-success">+@((log.Activity?.RewardTokenAmount ?? 0).ToString("N0")) TDC</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="fw-bold text-danger">-@((log.Reward?.Cost ?? 0).ToString("N0")) TDC</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

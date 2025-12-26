@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "TEDU Wallet Home";
+}
+
+<div class="text-center mt-5">
+    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-primary mb-3">Welcome to TEDU Wallet</h1>
+            <p class="col-md-8 fs-4 mx-auto mb-5 text-muted">
+                Your campus currency management system. Securely manage your activities, rewards, and coins.
+            </p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-primary btn-lg px-4 gap-3">Admin Dashboard</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Student" asp-action="Dashboard" class="btn btn-primary btn-lg px-4 gap-3">Student Dashboard</a>
+                    }
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg px-4 gap-3">Login</a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary btn-lg px-4">Create Account</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

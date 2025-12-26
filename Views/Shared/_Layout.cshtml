@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] -TEDU Wallet</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/teduWallet.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <span class="text-warning">TEDU</span> Wallet
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                    </ul>
+                    <div class="navbar-text">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <span class="me-3 text-light">Welcome, @User.Identity.Name</span>
+                            <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-warning btn-sm">Logout</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-sm me-2">Login</a>
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-warning btn-sm">Register</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="main-container">
+            @RenderBody()
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - teduWallet - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

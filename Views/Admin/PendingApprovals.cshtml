@@ -1,0 +1,103 @@
+@model IEnumerable<teduWallet.Models.Apply>
+@{
+  ViewData["Title"] = "Pending Approvals";
+  Layout = "_AdminLayout";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">Pending Task Approvals ⏳</h2>
+            <p class="text-muted">Review and approve task completions to award TEDU Coins.</p>
+        </div>
+    </div>
+
+  @if (TempData["Success"] != null)
+  {
+          <div class="alert alert-success alert-dismissible fade show rounded-pill px-4 mb-4" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+  }
+
+  @if (TempData["Error"] != null)
+  {
+          <div class="alert alert-danger alert-dismissible fade show rounded-pill px-4 mb-4" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["Error"]
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+  }
+
+    <div class="card border-0 shadow-sm" style="border-radius: 24px;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3 text-uppercase small fw-bold">Student</th>
+                            <th class="py-3 text-uppercase small fw-bold">Department</th>
+                            <th class="py-3 text-uppercase small fw-bold">Task</th>
+                            <th class="py-3 text-uppercase small fw-bold text-center">Reward</th>
+                            <th class="py-3 text-uppercase small fw-bold text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if (!Model.Any())
+            {
+                              <tr>
+                                  <td colspan="5" class="text-center py-5 text-muted">
+                                      <i class="bi bi-inbox fs-1 d-block mb-3 opacity-25"></i>
+                                      No pending approvals found.
+                                  </td>
+                              </tr>
+            }
+            else
+            {
+              @foreach (var apply in Model)
+              {
+                                    <tr>
+                                        <td class="ps-4 py-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                        @(apply.Student.Name[0])@(apply.Student.Surname?[0])
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold">@apply.Student.Name @apply.Student.Surname</h6>
+                                                    <small class="text-muted">@@@apply.Student.Username</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3">@apply.Student.Departmant</td>
+                                        <td class="py-3">
+                                            <div class="fw-bold">@apply.Activity.Title</div>
+                                            <small class="text-muted">Task ID: #@apply.ActivityId</small>
+                                        </td>
+                                        <td class="py-3 text-center">
+                                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-3">
+                      @apply.Activity.RewardTokenAmount Coins
+                                            </span>
+                                        </td>
+                                        <td class="py-3 text-end pe-4">
+                                            <form asp-action="ApproveTask" method="post" class="d-inline">
+                                                <input type="hidden" name="studentId" value="@apply.StudentId" />
+                                                <input type="hidden" name="activityId" value="@apply.ActivityId" />
+                                                <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold">
+                                                    Approve
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+              }
+            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-sm { font-weight: 600; font-size: 0.875rem; }
+    .table thead th { border-top: 0; }
+    .table tbody tr:last-child td { border-bottom: 0; }
+</style>

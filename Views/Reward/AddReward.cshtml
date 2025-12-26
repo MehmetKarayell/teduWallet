@@ -1,0 +1,130 @@
+@model teduWallet.Models.Reward
+@{
+  ViewData["Title"] = "Add New Reward";
+  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-dark text-white p-4">
+          <div class="d-flex align-items-center">
+            <div class="icon-box bg-success text-white rounded-3 p-3 me-3">
+              <i class="bi bi-gift-fill fs-3"></i>
+            </div>
+            <div>
+              <h2 class="mb-0 fw-bold">Create New Reward</h2>
+              <p class="text-secondary mb-0">Define a new reward for students to purchase with coins.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-5">
+          <form asp-action="AddReward" method="post" class="needs-validation">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4 rounded-3"></div>
+
+            <div class="row g-4">
+              <!-- Reward Name -->
+              <div class="col-12">
+                <label asp-for="RewardName" class="form-label fw-bold text-dark">Reward Name</label>
+                <input asp-for="RewardName" class="form-control form-control-lg border-2 rounded-3 shadow-sm bg-light"
+                  placeholder="e.g., Free Coffee Coupon" required />
+                <span asp-validation-for="RewardName" class="text-danger small"></span>
+              </div>
+
+              <!-- Vendor & Type -->
+              <div class="col-md-6">
+                <label asp-for="Vendor" class="form-label fw-bold text-dark">Vendor</label>
+                <input asp-for="Vendor" class="form-control form-control-lg border-2 rounded-3 shadow-sm bg-light" 
+                  placeholder="e.g. Starbucks" />
+                <span asp-validation-for="Vendor" class="text-danger small"></span>
+              </div>
+              <div class="col-md-6">
+                <label asp-for="RewardType" class="form-label fw-bold text-dark">Type/Category</label>
+                <select asp-for="RewardType" class="form-select form-select-lg border-2 rounded-3 shadow-sm bg-light" required>
+                    <option value="">Select Type...</option>
+                    <option value="Food & Drink">Food & Drink</option>
+                    <option value="Merchandise">Merchandise</option>
+                    <option value="Service">Service</option>
+                    <option value="Digital">Digital</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span asp-validation-for="RewardType" class="text-danger small"></span>
+              </div>
+
+              <!-- Cost -->
+              <div class="col-md-6">
+                <label asp-for="Cost" class="form-label fw-bold text-dark">Cost (Coins)</label>
+                <div class="input-group">
+                  <span class="input-group-text border-2 rounded-start-3 bg-warning-subtle text-warning-emphasis">
+                    <i class="bi bi-coin"></i>
+                  </span>
+                  <input asp-for="Cost" type="number"
+                    class="form-control form-control-lg border-2 rounded-end-3 shadow-sm bg-light" placeholder="0"
+                    required />
+                </div>
+                <span asp-validation-for="Cost" class="text-danger small"></span>
+              </div>
+
+              <!-- Unique Code -->
+              <div class="col-md-6">
+                <label asp-for="UniqueCode" class="form-label fw-bold text-dark">Unique Code</label>
+                <div class="input-group">
+                  <span class="input-group-text border-2 rounded-start-3 bg-primary-subtle text-primary-emphasis">
+                    <i class="bi bi-upc-scan"></i>
+                  </span>
+                  <input asp-for="UniqueCode" type="text"
+                    class="form-control form-control-lg border-2 rounded-end-3 shadow-sm bg-light" placeholder="CODE123"
+                    required />
+                </div>
+                <span asp-validation-for="UniqueCode" class="text-danger small"></span>
+              </div>
+
+              <!-- Expiry Date -->
+              <div class="col-md-6">
+                <label asp-for="ExpiryDate" class="form-label fw-bold text-dark">Expiry Date</label>
+                <input asp-for="ExpiryDate" type="date"
+                  class="form-control form-control-lg border-2 rounded-3 shadow-sm bg-light" />
+                <span asp-validation-for="ExpiryDate" class="text-danger small"></span>
+              </div>
+            </div>
+
+            <div class="mt-5 d-flex gap-3">
+              <button type="submit"
+                class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm transition-all hover-scale flex-grow-1">
+                <i class="bi bi-check-circle-fill me-2"></i> Create Reward
+              </button>
+              <a asp-controller="Reward" asp-action="ManageRewards"
+                class="btn btn-outline-secondary btn-lg px-4 py-3 rounded-pill fw-bold">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-control:focus, .form-select:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+  }
+
+  .hover-scale:hover {
+    transform: translateY(-2px);
+  }
+
+  .transition-all {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+  }
+</style>

@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TEDU Wallet</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body class="auth-body">
+    <div class="auth-container">
+        <!-- Visual Sidebar -->
+        <div class="auth-visual">
+            <div class="auth-visual-content">
+                <div class="mb-4">
+                    <img src="/img/logo-white.png" alt="TEDU"
+                        style="height: 40px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"
+                        onerror="this.src='https://icons.getbootstrap.com/assets/icons/wallet2.svg'; this.style.filter='invert(1)'">
+                </div>
+                <h1>Welcome Back</h1>
+                <p>Log in to your account to continue managing your wallet, rewards, and tasks in the TEDU digital
+                    ecosystem.</p>
+            </div>
+        </div>
+
+        <!-- Form Sidebar -->
+        <div class="auth-form-side">
+            <div class="auth-form-header">
+                <h2>Login</h2>
+                <p>Enter your credentials to access your dashboard.</p>
+            </div>
+
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                <div class="mb-3">
+                    <label for="username" class="auth-form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-control auth-form-control"
+                        placeholder="Enter username" required />
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="auth-form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control auth-form-control"
+                        placeholder="••••••••" required />
+                </div>
+
+                <button type="submit" class="btn auth-btn w-100">Sign In</button>
+
+                <div class="auth-link-container">
+                    Don't have an account? <a asp-action="Register">Create Account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

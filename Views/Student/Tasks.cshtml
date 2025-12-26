@@ -1,0 +1,75 @@
+@model teduWallet.Models.ViewModels.StudentTasksViewModel
+@{
+    ViewData["Title"] = "My Tasks";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">Available Tasks</h2>
+            <p class="text-muted">Complete these tasks to earn more TEDU coins.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @if (!Model.AvailableActivities.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info rounded-4 border-0 shadow-sm p-4">
+                    <div class="d-flex align-items-center">
+                         <i class="bi bi-info-circle-fill fs-3 me-3"></i>
+                         <div>
+                             <h5 class="fw-bold mb-1">No tasks available</h5>
+                             <p class="mb-0">There are currently no active tasks. Please check back later!</p>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var activity in Model.AvailableActivities)
+            {
+                var isApplied = Model.AppliedActivityIds.Contains(activity.ActivityId);
+                
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="p-3 rounded-circle bg-primary bg-opacity-10 text-primary">
+                                    <i class="bi bi-journal-text fs-4"></i>
+                                </div>
+                                @if (isApplied)
+                                {
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2 rounded-pill">Applied</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">Open</span>
+                                }
+                            </div>
+                            <h5 class="fw-bold">@activity.Title</h5>
+                            <p class="text-muted small mb-4" style="min-height: 4.5em;">
+                                @(activity.Description?.Length > 100 ? activity.Description.Substring(0, 97) + "..." : activity.Description)
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-primary">@activity.RewardTokenAmount.ToString("N0") Coins</span>
+                                @if(isApplied) 
+                                {
+                                    <button class="btn btn-secondary btn-sm rounded-pill px-4" disabled>Applied</button>
+                                }
+                                else 
+                                {
+                                    <form asp-action="Apply" method="post">
+                                        <input type="hidden" name="activityId" value="@activity.ActivityId" />
+                                        <button type="submit" class="btn btn-primary btn-sm rounded-pill px-4">Start</button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

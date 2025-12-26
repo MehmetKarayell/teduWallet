@@ -1,0 +1,126 @@
+@model IEnumerable<teduWallet.Models.Reward>
+@{
+    ViewData["Title"] = "Manage Rewards";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-0">Manage Rewards</h1>
+            <p class="text-muted">View, edit, or delete student rewards.</p>
+        </div>
+        <a asp-action="AddReward" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">
+            <i class="bi bi-plus-circle-fill me-2"></i> Add New Reward
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="px-4 py-3 text-secondary small fw-bold text-uppercase">Reward Info</th>
+                            <th class="px-4 py-3 text-secondary small fw-bold text-uppercase">Type</th>
+                            <th class="px-4 py-3 text-secondary small fw-bold text-uppercase">Cost</th>
+                            <th class="px-4 py-3 text-secondary small fw-bold text-uppercase">Status</th>
+                            <th class="px-4 py-3 text-secondary small fw-bold text-uppercase">Expiry</th>
+                            <th class="px-4 py-3 text-secondary small fw-bold text-uppercase text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-3 bg-light p-2 me-3 text-warning">
+                                                <i class="bi bi-gift fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">@item.RewardName</div>
+                                                <div class="small text-muted">@item.Vendor</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <span class="badge bg-light text-dark border fw-normal px-3 py-2 rounded-pill">
+                                            @item.RewardType
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex align-items-center text-warning fw-bold">
+                                            <i class="bi bi-coin me-1"></i> @item.Cost.ToString("N0")
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        @if (item.Status == "Active")
+                                        {
+                                            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill">@item.Status</span>
+                                        }
+                                    </td>
+                                    <td class="px-4 py-3 text-muted">
+                                        @item.ExpiryDate?.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a asp-action="EditReward" asp-route-id="@item.RewardId" 
+                                               class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold">
+                                                Edit
+                                            </a>
+                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteModal-@item.RewardId">
+                                                Delete
+                                            </button>
+                                        </div>
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deleteModal-@item.RewardId" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content rounded-4 border-0">
+                                                    <div class="modal-body p-4 text-center">
+                                                        <div class="mb-3 text-danger bg-danger bg-opacity-10 p-3 rounded-circle d-inline-block">
+                                                            <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+                                                        </div>
+                                                        <h5 class="fw-bold mb-2">Delete Reward?</h5>
+                                                        <p class="text-muted mb-4">
+                                                            Are you sure you want to delete "<strong>@item.RewardName</strong>"? This action cannot be undone.
+                                                        </p>
+                                                        <div class="d-flex justify-content-center gap-2">
+                                                            <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
+                                                            <form asp-action="DeleteReward" asp-route-id="@item.RewardId" method="post">
+                                                                <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="px-4 py-5 text-center text-muted">
+                                    <div class="mb-3">
+                                        <i class="bi bi-inbox fs-1 text-light-emphasis"></i>
+                                    </div>
+                                    <p class="mb-0">No rewards found. Click "Add New Reward" to create one.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
